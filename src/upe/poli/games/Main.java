@@ -25,7 +25,7 @@ public class Main {
         BuscaAEstrela buscaAEstrela = new BuscaAEstrela(grafo);
         Jogador jogador = new Jogador(nomeJogador, 50, grafo, grafo.getVertices().get(i),buscaAEstrela.mapearEstacaoDestino(grafo.getVertices().get(i)) );
 
-        //JogoGUI jogoGUI = new JogoGUI(jogador);
+        //JogoGUI  jogoGUI = new JogoGUI(jogador);
 
 
         JFrame frame = new JFrame("Grafo do Metrô");
