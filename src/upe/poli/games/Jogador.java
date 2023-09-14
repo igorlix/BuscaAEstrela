@@ -136,7 +136,7 @@ public class Jogador {
             System.out.println(nome + " pagou " + valor + " reais pela passagem.");
         } else {
             System.out.println(nome + " não possui saldo suficiente para pagar a passagem.");
-            // Verifica se o saldo é igual a 0,1 após o pagamento.
+            
             if (saldo + 0.1 >= valor) {
                 saldo = 0.1; // Define o saldo como 0,1 reais.
                 System.out.println(nome + " pagou com tudo que tinha e agora tem 0,1 reais.");
@@ -212,23 +212,23 @@ public class Jogador {
         }
     }
     public void pularEstacoes(Grafo grafo, Vertice destino) {
-        // Verifica se o jogador já está no destino.
+        
         if (estacaoAtual.equals(destino)) {
             System.out.println("Você já está na estação de destino!");
             return;
         }
 
-        // Executa a busca A* para encontrar o caminho mais curto até o destino.
+    
         BuscaAEstrela buscaAEstrela = new BuscaAEstrela(grafo);
         List<Vertice> caminho = buscaAEstrela.buscarCaminho(estacaoAtual, destino);
 
-        // Verifica se um caminho foi encontrado.
+       
         if (caminho == null || caminho.size() <= 2) {
             System.out.println("Não foi possível encontrar um caminho para pular duas estações.");
             return;
         }
 
-        // Move o jogador duas estações mais perto do destino.
+       
         Vertice estacaoPulada = caminho.get(2);
         System.out.println("Você pulou duas estações à frente para: " + estacaoPulada.getNome());
         setEstacaoAnterior(estacaoAtual);
