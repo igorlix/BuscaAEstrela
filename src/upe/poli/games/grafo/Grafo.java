@@ -134,7 +134,7 @@ public class Grafo {
                 return aresta;
             }
         }
-        return null; // Retorna null se a aresta não for encontrada.
+        return null;
     }
 
     public double getDistanciaDireta(Vertice estacao1, Vertice estacao2) {
@@ -144,7 +144,7 @@ public class Grafo {
         if (indiceEstacao1 != -1 && indiceEstacao2 != -1) {
             return distanciaDireta[indiceEstacao1][indiceEstacao2];
         } else {
-            return -1.0; // Retorna -1 para indicar que a distância não foi encontrada.
+            return -1.0;
         }
     }
 
