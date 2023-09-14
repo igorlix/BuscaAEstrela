@@ -7,6 +7,7 @@ public class Grafo {
     private double[][] distanciaReal;
     private double[][] distanciaDireta;
     private List<Vertice> vertices;
+
     private List<Aresta> arestas;
 
     public Grafo() {
@@ -15,8 +16,10 @@ public class Grafo {
         this.vertices = new ArrayList<>();
         this.arestas = new ArrayList<>();
 
-        // Tabela de distâncias diretas (linha reta) entre as estações do Metrô de Paris:
+
+        // Tabela de distâncias diretas (linha reta)
         double[][] tabelaDistanciaDireta = {
+                // E1  E2    E3     E4    E5   E6    E7    E8    E9   E10   E11   E12   E13  E14
                 {0.0, 10.0, 18.5, 24.8, 36.4, 38.8, 35.8, 25.4, 17.6, 9.1, 16.7, 27.3, 27.6, 29.8},
                 {10.0, 0.0, 8.5, 14.8, 26.6, 29.1, 26.1, 17.3, 10.0, 3.5, 15.5, 20.9, 19.1, 21.8},
                 {18.5, 8.5, 0.0, 6.3, 18.2, 20.6, 17.6, 13.6, 9.4, 10.3, 19.5, 19.1, 12.1, 16.6},
@@ -33,45 +36,44 @@ public class Grafo {
                 {29.8, 21.8, 16.6, 15.4, 17.9, 18.2, 15.6, 27.6, 26.6, 21.2, 35.5, 33.6, 5.1, 0.0}
         };
 
-        // Copie os valores da tabela para as matrizes de distância.
         for (int i = 0; i < 14; i++) {
             for (int j = 0; j < 14; j++) {
                 distanciaDireta[i][j] = tabelaDistanciaDireta[i][j];
             }
         }
 
-        // Tabela de distâncias reais entre as estações do Metrô de Paris:
+        // Tabela de distâncias reais
         double[][] tabelaDistanciaReal = {
                 {0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 8.5, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 3.5, 0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 6.3, 0.0, 0.0, 0.0, 0.0, 9.4, 0.0, 0.0, 0.0, 18.7, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 13.0, 0.0, 0.0, 15.3, 0.0, 0.0, 0.0, 0.0, 12.8, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 2.4, 30.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 12.2, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.1},
-                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+                {10.0, 0, 8.5, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 3.5, 0.0, 0.0, 0.0, 0.0},
+                {0.0,  8.5, 0, 6.3, 0.0, 0.0, 0.0, 0.0, 9.4, 0.0, 0.0, 0.0, 18.7, 0.0},
+                {0.0, 0.0, 6.3, 0, 13.0, 0.0, 0.0, 15.3, 0.0, 0.0, 0.0, 0.0, 12.8, 0.0},
+                {0.0, 0.0, 0.0, 13.0, 0, 3.0, 2.4, 30.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+                {0.0, 0.0, 0.0, 0.0, 3.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+                {0.0, 0.0, 0.0, 0.0, 2.4, 0.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+                {0.0, 0.0, 0.0, 15.3, 30.0, 0.0, 0.0, 0, 9.6, 0.0, 0.0, 6.4, 0.0, 0.0},
+                {0.0, 10.0, 9.4, 0.0, 0.0, 0.0, 0.0, 9.6, 0, 0.0, 12.2, 0.0, 0.0, 0.0},
+                {0.0, 3.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0},
+                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 12.2, 0.0, 0, 0.0, 0.0, 0.0},
+                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 6.4, 0.0, 0.0, 0, 0.0, 0.0},
+                {0.0, 0.0, 18.7, 12.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 5.1},
+                {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.1, 0}
         };
 
-        // Copie os valores da tabela para a matriz de distância real.
         for (int i = 0; i < 14; i++) {
             for (int j = 0; j < 14; j++) {
                 distanciaReal[i][j] = tabelaDistanciaReal[i][j];
             }
         }
 
-        // Crie vértices para cada estação.
+        //instancias de vertices e arestas
+
         for (int i = 0; i < 14; i++) {
-            Vertice vertice = new Vertice("E" + (i + 1));
+            Vertice vertice = new Vertice("E" + (i + 1), i);
             vertices.add(vertice);
         }
 
-        // Crie arestas entre estações vizinhas com distância real não nula.
+
         for (int i = 0; i < 14; i++) {
             for (int j = 0; j < 14; j++) {
                 if (i != j && distanciaReal[i][j] > 0) {
@@ -98,6 +100,15 @@ public class Grafo {
 
     public List<Aresta> getArestas() {
         return arestas;
+    }
+
+    public Vertice getVerticeIndice(int indice) {
+        for (Vertice vertice : vertices) {
+            if (vertice.getIndice() == indice) {
+                return vertice;
+            }
+        }
+        return null;
     }
 
 

@@ -3,9 +3,9 @@ package upe.poli.games.grafo;
 
 public class Vertice {
     private String nome;
-    private int indice; // Adicione um campo para o índice
+    private int indice;
 
-    public Vertice(String nome) {
+    public Vertice(String nome, int indice) {
         this.nome = nome;
         this.indice = indice;
     }
@@ -14,17 +14,11 @@ public class Vertice {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
     public int getIndice() {
         return indice;
     }
 
-    public void setIndice(int indice) {
-        this.indice = indice;
-    }
 
     @Override
     public String toString() {

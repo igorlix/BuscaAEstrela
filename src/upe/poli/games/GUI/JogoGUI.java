@@ -1,4 +1,4 @@
-package upe.poli.games;
+package upe.poli.games.GUI;
 
 import upe.poli.games.Jogador;
 import upe.poli.games.grafo.Vertice;
@@ -17,9 +17,8 @@ public class JogoGUI {
     private JFrame frame;
     private JTextArea infoTextArea;
     private JPanel estacoesPanel;
-    private ButtonGroup estacoesButtonGroup;
     private JButton continuarButton;
-    private JButton sorteOuRevesButton;
+    private ButtonGroup estacoesButtonGroup;
     private boolean revelar;
 
     public JogoGUI(Jogador jogador) {
@@ -27,13 +26,16 @@ public class JogoGUI {
         this.frame = new JFrame("Jogo do Metrô");
         this.infoTextArea = new JTextArea(10, 40);
         this.estacoesPanel = new JPanel();
-        this.estacoesButtonGroup = new ButtonGroup();
         this.continuarButton = new JButton("Continuar");
-        this.sorteOuRevesButton = new JButton("Sorte ou Revés");
+        this.estacoesButtonGroup = new ButtonGroup();
         this.revelar = true;
 
         // Configurar a área de informações
         infoTextArea.setEditable(false);
+
+        // Configurar o painel de estações com botões de rádio
+        estacoesPanel.setLayout(new GridLayout(0, 1));
+        exibirEstacoesVizinhas();
 
         // Configurar o botão "Continuar"
         continuarButton.addActionListener(new ActionListener() {
@@ -41,17 +43,18 @@ public class JogoGUI {
             public void actionPerformed(ActionEvent e) {
                 String estacaoEscolhida = obterEstacaoEscolhida();
                 if (estacaoEscolhida != null) {
-                    exibirSorteOuReves();
+                    Vertice proximaEstacao = encontrarEstacaoPorNome(estacaoEscolhida);
+                    if (proximaEstacao != null) {
+                        jogador.moverEstacao(proximaEstacao);
+                        lidarComEventoSorteOuReves();
+                        atualizarInfoTextArea();
+                        if (jogador.getDestinoFinal() == jogador.getEstacaoAtual() || jogador.getSaldo() == 0) {
+                            gameOver();
+                        } else {
+                            exibirEstacoesVizinhas();
+                        }
+                    }
                 }
-            }
-        });
-
-        // Configurar o botão "Sorte ou Revés"
-        sorteOuRevesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                lidarComEventoSorteOuReves();
-                exibirEstacoesVizinhas(); // Atualizar a tela das estações após Sorte ou Revés
             }
         });
 
@@ -66,17 +69,45 @@ public class JogoGUI {
         frame.setVisible(true);
 
         atualizarInfoTextArea();
-        exibirEstacoesVizinhas();
     }
 
     private String obterEstacaoEscolhida() {
+        ButtonModel selectedButton = null;
         for (Enumeration<AbstractButton> buttons = estacoesButtonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
             if (button.isSelected()) {
-                return button.getActionCommand();
+                selectedButton = button.getModel();
+                break;
+            }
+        }
+
+        if (selectedButton != null) {
+            return selectedButton.getActionCommand();
+        } else {
+            return null;
+        }
+    }
+
+    private Vertice encontrarEstacaoPorNome(String nomeEstacao) {
+        for (Vertice vertice : jogador.getGrafo().getVertices()) {
+            if (vertice.getNome().equalsIgnoreCase(nomeEstacao)) {
+                return vertice;
             }
         }
         return null;
+    }
+
+    private void lidarComEventoSorteOuReves() {
+        Random random = new Random();
+        int chanceEvento = random.nextInt(100);
+
+        if (chanceEvento < 50) { // 50% de chance de ocorrer evento de sorte ou revés.
+            Sorte sorte = new Sorte();
+            sorte.aplicarSorte(jogador);
+        } else {
+            Reves reves = new Reves();
+            reves.aplicarReves(jogador);
+        }
     }
 
     private void exibirEstacoesVizinhas() {
@@ -92,43 +123,6 @@ public class JogoGUI {
             estacoesPanel.add(radioButton);
         }
 
-        estacoesPanel.revalidate();
-        estacoesPanel.repaint();
-    }
-
-    private void exibirSorteOuReves() {
-        frame.remove(estacoesPanel);
-        frame.remove(continuarButton);
-        frame.add(sorteOuRevesButton, BorderLayout.CENTER);
-        frame.revalidate();
-        frame.repaint();
-    }
-
-    private void lidarComEventoSorteOuReves() {
-        Random random = new Random();
-        int chanceEvento = random.nextInt(100);
-
-        if (chanceEvento < 50) { // 50% de chance de ocorrer evento de sorte ou revés.
-            Sorte sorte = new Sorte();
-            sorte.aplicarSorte(jogador);
-        } else {
-            Reves reves = new Reves();
-            reves.aplicarReves(jogador);
-        }
-
-        // Simule a exibição de uma imagem para representar o efeito
-        mostrarImagemDeEfeito();
-    }
-
-    private void mostrarImagemDeEfeito() {
-        // Aqui você pode mostrar uma imagem que representa o efeito sorte ou revés.
-        // Por exemplo, você pode usar um JOptionPane para mostrar uma mensagem ou imagem.
-        JOptionPane.showMessageDialog(frame, "Efeito Sorte ou Revés!");
-
-        // Volte para a tela das estações após o efeito
-        frame.remove(sorteOuRevesButton);
-        frame.add(estacoesPanel, BorderLayout.CENTER);
-        frame.add(continuarButton, BorderLayout.SOUTH);
         frame.revalidate();
         frame.repaint();
     }
@@ -152,4 +146,9 @@ public class JogoGUI {
         infoTextArea.setText(info);
     }
 
+    private void gameOver() {
+        frame.dispose();
+        JOptionPane.showMessageDialog(null, "Jogo encerrado. Obrigado por jogar!");
+        System.exit(0);
+    }
 }

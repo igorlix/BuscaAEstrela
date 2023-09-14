@@ -14,6 +14,7 @@ public class Jogador {
     private Vertice estacaoAtual;
     private Vertice estacaoAnterior;
     private List<Aresta> arestasVisitadas;
+    private List<Vertice> verticesVisitados;
     private Grafo grafo;
     private Vertice destinoFinal;
 
@@ -27,6 +28,7 @@ public class Jogador {
         this.estacaoAnterior = null;
         this.destinoFinal = destinoFinal;
         this.arestasVisitadas = new ArrayList<>();
+        this.verticesVisitados = new ArrayList<>();
         this.grafo = grafo;
         this.revelar = true;
     }
@@ -79,6 +81,21 @@ public class Jogador {
         return arestasVisitadas;
     }
 
+    public void adicionarVerticeVisitado(Vertice vertice) {
+        this.verticesVisitados.add(vertice);
+    }
+
+    public void adicionarVerticesVisitados(List<Vertice> vertices) {
+        this.verticesVisitados.addAll(vertices);
+    }
+
+
+
+    public List<Vertice> getVerticesVisitados() {
+        return verticesVisitados;
+    }
+
+
     public void moverEstacao(Vertice destino) {
         if (estacaoAtual == null || destino == null) {
             System.out.println("Não é possível mover para uma estação nula.");
@@ -108,6 +125,7 @@ public class Jogador {
 
 
         adicionarArestaVisitada(aresta);
+
 
         System.out.println("Você se moveu para a estação: " + destino.getNome());
     }
@@ -202,7 +220,7 @@ public class Jogador {
 
         // Executa a busca A* para encontrar o caminho mais curto até o destino.
         BuscaAEstrela buscaAEstrela = new BuscaAEstrela(grafo);
-        List<Vertice> caminho = buscaAEstrela.buscarCaminho(estacaoAtual, destino, true);
+        List<Vertice> caminho = buscaAEstrela.buscarCaminho(estacaoAtual, destino);
 
         // Verifica se um caminho foi encontrado.
         if (caminho == null || caminho.size() <= 2) {

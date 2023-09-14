@@ -13,12 +13,12 @@ public class BuscaAEstrela {
         this.grafo = grafo;
     }
 
-    public List<Vertice> buscarCaminho(Vertice origem, Vertice destino, boolean usarDistanciaReal) {
+    public List<Vertice> buscarCaminho(Vertice origem, Vertice destino) {
         Map<Vertice, Double> custoG = new HashMap<>();
         Map<Vertice, Vertice> caminho = new HashMap<>();
         PriorityQueue<Vertice> filaPrioridade = new PriorityQueue<>((v1, v2) -> {
-            double f1 = custoG.get(v1) + heuristica(v1, destino, usarDistanciaReal);
-            double f2 = custoG.get(v2) + heuristica(v2, destino, usarDistanciaReal);
+            double f1 = custoG.get(v1) + heuristica(v1, destino);
+            double f2 = custoG.get(v2) + heuristica(v2, destino);
             return Double.compare(f1, f2);
         });
 
@@ -37,9 +37,9 @@ public class BuscaAEstrela {
                 return reconstruirCaminho(caminho, destino);
             }
 
-            for (Vertice vizinho : obterVizinhos(atual, usarDistanciaReal)) {
+            for (Vertice vizinho : obterVizinhos(atual)) {
                 double custoAtual = custoG.get(atual);
-                double custoAresta = obterCustoAresta(atual, vizinho, usarDistanciaReal);
+                double custoAresta = obterCustoAresta(atual, vizinho);
                 double novoCusto = custoAtual + custoAresta;
 
                 if (novoCusto < custoG.get(vizinho)) {
@@ -50,38 +50,33 @@ public class BuscaAEstrela {
             }
         }
 
-        return null; // Não foi encontrado um caminho
+        return null;
     }
 
-    private List<Vertice> obterVizinhos(Vertice vertice, boolean usarDistanciaReal) {
+    private List<Vertice> obterVizinhos(Vertice vertice) {
         List<Vertice> vizinhos = new ArrayList<>();
         for (Aresta aresta : grafo.getArestas()) {
             if (aresta.getOrigem().equals(vertice)) {
-                if (usarDistanciaReal && grafo.getDistanciaReal()[aresta.getOrigem().getIndice()][aresta.getDestino().getIndice()] > 0) {
-                    vizinhos.add(aresta.getDestino());
-                } else if (!usarDistanciaReal && grafo.getDistanciaDireta()[aresta.getOrigem().getIndice()][aresta.getDestino().getIndice()] > 0) {
-                    vizinhos.add(aresta.getDestino());
-                }
+                vizinhos.add(aresta.getDestino());
             }
         }
         return vizinhos;
     }
 
-    private double obterCustoAresta(Vertice origem, Vertice destino, boolean usarDistanciaReal) {
+    private double obterCustoAresta(Vertice origem, Vertice destino) {
         for (Aresta aresta : grafo.getArestas()) {
             if (aresta.getOrigem().equals(origem) && aresta.getDestino().equals(destino)) {
-                return usarDistanciaReal ? grafo.getDistanciaReal()[origem.getIndice()][destino.getIndice()] : grafo.getDistanciaDireta()[origem.getIndice()][destino.getIndice()];
+                return grafo.getDistanciaReal()[origem.getIndice()][destino.getIndice()] > 0 ?
+                        grafo.getDistanciaReal()[origem.getIndice()][destino.getIndice()] :
+                        grafo.getDistanciaDireta()[origem.getIndice()][destino.getIndice()];
             }
         }
         return Double.POSITIVE_INFINITY;
     }
 
-    private double heuristica(Vertice atual, Vertice destino, boolean usarDistanciaReal) {
-        if (usarDistanciaReal) {
-            return grafo.getDistanciaReal()[atual.getIndice()][destino.getIndice()];
-        } else {
-            return grafo.getDistanciaDireta()[atual.getIndice()][destino.getIndice()];
-        }
+    private double heuristica(Vertice atual, Vertice destino) {
+        double distanciaDireta = grafo.getDistanciaDireta()[atual.getIndice()][destino.getIndice()];
+        return distanciaDireta;
     }
 
     private List<Vertice> reconstruirCaminho(Map<Vertice, Vertice> caminho, Vertice destino) {
