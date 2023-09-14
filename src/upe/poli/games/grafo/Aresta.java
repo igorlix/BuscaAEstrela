@@ -11,7 +11,7 @@ public class Aresta {
         this.destino = destino;
         this.precoPassagem = precoPassagem;
         this.distancia = distancia;
-        this.visitada = false; // Inicialmente, a aresta não foi visitada.
+        this.visitada = false;
     }
 
     public Vertice getOrigem() {
