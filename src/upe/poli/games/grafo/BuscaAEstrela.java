@@ -22,7 +22,7 @@ public class BuscaAEstrela {
             return Double.compare(f1, f2);
         });
 
-        // Inicialização
+        
         for (Vertice vertice : grafo.getVertices()) {
             custoG.put(vertice, Double.POSITIVE_INFINITY);
         }
@@ -95,11 +95,9 @@ public class BuscaAEstrela {
 
 
     public Vertice mapearEstacaoDestino(Vertice estacaoInicial) {
-        // Crie um mapa de mapeamento de estações iniciais para destinos.
         Map<Vertice, Vertice> mapeamentoEstacoes = new HashMap<>();
         List<Vertice> vertices = grafo.getVertices();
 
-        // Defina o mapeamento com base na sua lógica.
         mapeamentoEstacoes.put(vertices.get(0), vertices.get(5));
         mapeamentoEstacoes.put(vertices.get(1), vertices.get(6));
         mapeamentoEstacoes.put(vertices.get(2), vertices.get(5));
@@ -115,7 +113,6 @@ public class BuscaAEstrela {
         mapeamentoEstacoes.put(vertices.get(12), vertices.get(10));
         mapeamentoEstacoes.put(vertices.get(13), vertices.get(5));
 
-        // Use o mapa para obter a estação de destino correspondente.
         return mapeamentoEstacoes.get(estacaoInicial);
     }
 
