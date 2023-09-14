@@ -138,10 +138,10 @@ public class Jogador {
             System.out.println(nome + " não possui saldo suficiente para pagar a passagem.");
             
             if (saldo + 0.1 >= valor) {
-                saldo = 0.1; // Define o saldo como 0,1 reais.
+                saldo = 0.1;
                 System.out.println(nome + " pagou com tudo que tinha e agora tem 0,1 reais.");
             } else {
-                saldo = 0.0; // Define o saldo como 0,0 reais.
+                saldo = 0.0;
                 System.out.println(nome + " ficou sem dinheiro!");
             }
         }
